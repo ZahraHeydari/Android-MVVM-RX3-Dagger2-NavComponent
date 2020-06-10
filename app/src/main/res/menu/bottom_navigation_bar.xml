@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/recipes"
+            android:icon="@drawable/ic_spoon_knife_vector"
+            android:title="@string/recipes" />
+
+        <item
+            android:id="@+id/category"
+            android:icon="@drawable/ic_menu_vector"
+            android:title="@string/category" />
+
+        <item
+            android:id="@+id/favorites"
+            android:icon="@drawable/ic_star_full_vector"
+            android:title="@string/favorite" />
+    </group>
+
+</menu>

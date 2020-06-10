@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="2dp"
+    app:cardCornerRadius="16dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    tools:ignore="RtlCompat">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/favorite_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/favorite_image_height_size"
+            android:layout_marginBottom="8dp"
+            android:background="@color/lightGray"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/favorite_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/favorite_image_view"
+            android:layout_marginBottom="12dp"
+            android:layout_toEndOf="@+id/favorite_icon_image_view"
+            android:gravity="start|center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/subheading2" />
+
+
+        <ImageView
+            android:id="@id/favorite_icon_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/favorite_title_text_view"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/ic_star_full_vector" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+

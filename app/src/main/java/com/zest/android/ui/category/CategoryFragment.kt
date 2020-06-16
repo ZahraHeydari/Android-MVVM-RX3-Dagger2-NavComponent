@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.zest.android.R
 import com.zest.android.data.model.Category
 import com.zest.android.databinding.FragmentCategoryBinding
 import com.zest.android.ui.main.MainActivity
@@ -36,6 +37,13 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
         } else {
             throw ClassCastException("$context must implement OnMainCallback!")
         }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         (activity as MainActivity).mainComponent.inject(this)
 
@@ -47,7 +55,6 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCategoryBinding.inflate(inflater)
-
         binding.categoryRecyclerView.adapter = mAdapter
 
         with(viewModel){
@@ -70,11 +77,14 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
     }
 
 
-    fun scrollUp() {
-        binding.categoryRecyclerView.post {
-            binding.categoryRecyclerView.smoothScrollToPosition(0)// Call smooth scroll
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.category, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onDetach() {
         super.onDetach()

@@ -24,7 +24,6 @@ interface AppComponent {
     fun inject(app: MainApplication)
 
     fun mainComponent(): MainComponent.Factory
-    fun detailComponent(): DetailComponent.Factory
 
 
     @Component.Factory

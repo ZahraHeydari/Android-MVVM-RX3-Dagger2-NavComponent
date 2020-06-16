@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search"
+    app:startDestination="@id/searchFragment">
+
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:label=""
+        android:name="com.zest.android.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search" >
+
+        <argument
+            android:name="text"
+            app:argType="string" />
+    </fragment>
+
+
+    <action
+        android:id="@+id/action_searchFragment_to_detailFragment"
+        app:destination="@id/detailFragment">
+
+
+        <argument
+            android:name="recipe"
+            app:argType="com.zest.android.data.model.Recipe" />
+    </action>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:label=""
+        android:name="com.zest.android.ui.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail" />
+</navigation>

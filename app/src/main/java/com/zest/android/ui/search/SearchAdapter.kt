@@ -2,6 +2,8 @@ package com.zest.android.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.zest.android.R
@@ -46,7 +48,7 @@ class SearchAdapter(private val callback: OnSearchCallback) : RecyclerView.Adapt
             }
 
             itemView.setOnClickListener {
-                callback.gotoDetailPage(recipe)
+                Navigation.findNavController(itemView).navigate(R.id.detailFragment,bundleOf("recipe" to recipe))
             }
         }
     }

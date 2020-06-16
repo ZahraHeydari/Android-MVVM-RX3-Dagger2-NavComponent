@@ -2,17 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/category"
-    app:startDestination="@id/categoryFragment">
+    android:id="@+id/detail"
+    app:startDestination="@id/detailFragment">
+
 
     <fragment
-        android:id="@+id/categoryFragment"
-        android:name="com.zest.android.ui.category.CategoryFragment"
-        android:label="Food Category"
-        tools:layout="@layout/fragment_category" />
+        android:id="@+id/detailFragment"
+        android:name="com.zest.android.ui.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail">
+
+        <argument
+            android:name="recipe"
+            app:argType="com.zest.android.data.model.Recipe" />
+
+    </fragment>
+
 
     <action
-        android:id="@+id/action_categoryFragment_to_searchFragment"
+        android:id="@+id/action_detailFragment_to_searchFragment"
         app:destination="@id/searchFragment">
 
         <argument
@@ -23,8 +30,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
+        android:label=""
         android:name="com.zest.android.ui.search.SearchFragment"
-        android:label="" />
-
-
+        tools:layout="@layout/fragment_search" />
 </navigation>

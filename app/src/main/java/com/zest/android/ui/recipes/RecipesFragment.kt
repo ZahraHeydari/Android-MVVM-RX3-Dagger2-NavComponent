@@ -4,20 +4,28 @@ import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.zest.android.R
+import com.zest.android.RecipesDirections
 import com.zest.android.data.model.Recipe
 import com.zest.android.databinding.FragmentRecipesBinding
+import com.zest.android.ui.category.CategoryFragment
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.main.OnMainCallback
 import com.zest.android.util.NetworkStateReceiver
+import com.zest.android.util.currentNavigationFragment
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -35,6 +43,7 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
     private var mNetworkReceiver = NetworkStateReceiver()
     private lateinit var binding: FragmentRecipesBinding
     private lateinit var viewModel: RecipeViewModel
+
     @Inject
     lateinit var viewModelProvider: Provider<RecipeViewModel>
 
@@ -46,17 +55,20 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         } else {
             throw ClassCastException("$context must implement OnMainCallback!")
         }
-
-        (activity as MainActivity).mainComponent.inject(this)
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                    viewModelProvider.get() as T
-        }).get(RecipeViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+        (activity as MainActivity).mainComponent.inject(this)
+
+        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = viewModelProvider.get() as T
+        }).get(RecipeViewModel::class.java)
+
+
         mNetworkReceiver.addListener(this)
         context?.registerReceiver(mNetworkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
@@ -89,18 +101,12 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
     }
 
 
-    fun scrollUp() {
-        binding.recipesProgressBar.post {
-            binding.recipesRecyclerView.smoothScrollToPosition(0)// Call smooth scroll
-        }
-    }
-
     override fun showMessage(message: Int) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).setAction("Action", null).show()
     }
 
     override fun gotoDetailPage(recipe: Recipe) {
-        mCallback?.gotoDetailPage(recipe)
+        findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToDetailFragment(recipe))
     }
 
     override fun loadFavorite(recipe: Recipe): Recipe? {
@@ -132,6 +138,27 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         binding.recipesEmptyContainer.visibility = if (mAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.recipes, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search -> {
+                gotoSearchPage()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun gotoSearchPage() {
+        if (findNavController().currentDestination?.id == R.id.recipesFragment) {
+            findNavController().navigate(R.id.action_recipesFragment_to_searchFragment)
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

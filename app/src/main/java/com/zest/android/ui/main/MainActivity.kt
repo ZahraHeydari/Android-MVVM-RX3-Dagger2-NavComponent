@@ -6,20 +6,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.zest.android.CategoryDirections
 import com.zest.android.LifecycleLoggingActivity
 import com.zest.android.MainApplication
 import com.zest.android.R
 import com.zest.android.data.model.Category
-import com.zest.android.data.model.Recipe
 import com.zest.android.databinding.ActivityMainBinding
 import com.zest.android.di.component.MainComponent
-import com.zest.android.ui.category.CategoryFragment
-import com.zest.android.ui.detail.DetailActivity
-import com.zest.android.ui.recipes.RecipesFragment
-import com.zest.android.ui.search.SearchActivity
-import com.zest.android.util.extension.currentNavigationFragment
+import com.zest.android.util.currentNavigationFragment
 import com.zest.android.util.setupWithNavController
+
 
 /**
  * @Author ZARA.
@@ -36,6 +39,10 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.mainToolbar)
+
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+
 
         // Creation of the main graph using the application graph
         mainComponent = (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
@@ -43,18 +50,8 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
         // Make Dagger instantiate @Inject fields in MainActivity
         mainComponent.inject(this)
 
-        setSupportActionBar(binding.mainToolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
-        }
-
-        binding.mainToolbarTitleImageView.setOnClickListener{
-
-            val fragmentById = supportFragmentManager.currentNavigationFragment
-            if (fragmentById != null && fragmentById is RecipesFragment) fragmentById.scrollUp()
-            else if (fragmentById is CategoryFragment) fragmentById.scrollUp()
         }
 
     }
@@ -64,6 +61,7 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
      * Called on first creation and when restoring state.
      */
     private fun setupBottomNavigationBar() {
+
         val navGraphIds = listOf(
                 R.navigation.recipes,
                 R.navigation.category,
@@ -76,9 +74,14 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
                 containerId = R.id.nav_host_fragment_container,
                 intent = intent
         )
-        currentNavController = controller
-    }
 
+        // Whenever the selected controller changes, setup the action bar.
+        controller.observe(this, Observer { navController ->
+            setupActionBarWithNavController(navController)
+        })
+        currentNavController = controller
+
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
@@ -94,32 +97,25 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.home, menu)
+        menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        if (id == R.id.action_search) {
-            SearchActivity.start(this)
-            return true
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun gotoDetailPage(recipe: Recipe) {
-        DetailActivity.start(this, recipe)
-    }
 
     override fun gotoSubCategories(category: Category) {
-        SearchActivity.startWithText(this@MainActivity, category.title)
-    }
-
-    override fun updateActionBarTitle(resId: Int) {
-        supportActionBar?.setTitle(resId)
+        if (findNavController(R.id.nav_host_fragment_container).currentDestination?.id == R.id.categoryFragment) {
+            findNavController(R.id.nav_host_fragment_container)
+                    .navigate(CategoryDirections.actionCategoryFragmentToSearchFragment(category.title))
+        }
     }
 
     companion object {

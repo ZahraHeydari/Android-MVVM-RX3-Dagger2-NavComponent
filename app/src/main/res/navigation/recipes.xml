@@ -8,8 +8,36 @@
     <fragment
         android:id="@+id/recipesFragment"
         android:name="com.zest.android.ui.recipes.RecipesFragment"
-        android:label="RecipesFragment"
-        tools:layout="@layout/fragment_recipes" />
+        android:label="Recipes"
+        tools:layout="@layout/fragment_recipes">
+        <action
+            android:id="@+id/action_recipesFragment_to_detailFragment"
+            app:destination="@id/detailFragment" >
+
+            <argument android:name="recipe"
+                app:argType="com.zest.android.data.model.Recipe"/>
+
+        </action>
+    </fragment>
+
+    <action
+        android:id="@+id/action_recipesFragment_to_searchFragment"
+        app:destination="@id/searchFragment" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:label=""
+        android:name="com.zest.android.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search" />
+
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:label=""
+        android:name="com.zest.android.ui.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail" />
+
+
 
 
 </navigation>

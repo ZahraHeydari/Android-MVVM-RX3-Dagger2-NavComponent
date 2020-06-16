@@ -10,13 +10,6 @@ import com.zest.android.data.model.Recipe
  */
 interface OnMainCallback {
 
-
-    fun gotoDetailPage(recipe: Recipe)
-
-
     fun gotoSubCategories(category: Category)
-
-
-    fun updateActionBarTitle(resId: Int)
 
 }

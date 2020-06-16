@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.zest.android.FavoritesDirections
 import com.zest.android.R
 import com.zest.android.data.model.Recipe
 import com.zest.android.databinding.FragmentFavoriteBinding
+import com.zest.android.ui.detail.DetailFragmentDirections
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.main.OnMainCallback
 import com.zest.android.ui.recipes.RecipeViewModel
@@ -47,13 +50,13 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCallback?.updateActionBarTitle(R.string.favorite)
+        setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         (activity as MainActivity).mainComponent.inject(this)
 
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                    viewModelProvider.get() as T
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = viewModelProvider.get() as T
         }).get(RecipeViewModel::class.java)
     }
 
@@ -115,7 +118,12 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
 
 
     override fun gotoDetailPage(recipe: Recipe) {
-        mCallback?.gotoDetailPage(recipe)
+        findNavController().navigate(FavoritesDirections.actionFavoriteFragmentToDetailFragment(recipe))
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.favorites, menu)
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.SparseArray
 import androidx.core.util.forEach
 import androidx.core.util.set
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -229,3 +230,7 @@ private fun FragmentManager.isOnBackStack(backStackName: String): Boolean {
 }
 
 private fun getFragmentTag(index: Int) = "bottomNavigation#$index"
+
+
+val FragmentManager.currentNavigationFragment: Fragment?
+    get() = primaryNavigationFragment?.childFragmentManager?.fragments?.first()

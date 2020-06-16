@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".ui.detail.DetailActivity">
+    tools:context=".ui.detail.DetailFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/detail_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/detail_app_bar_layout_height_size"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -52,7 +49,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ToolbarColoredIcon" />
+                app:theme="@style/AppToolbarStyle" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

@@ -21,14 +21,14 @@ So I`ll be happy to hear from you!
  
 <br>
 <p align="center">
-  <img src="https://github.com/ZahraHeydari/Zest/blob/master/main_page.jpg" width="250"/>
-  <img src="https://github.com/ZahraHeydari/Zest/blob/master/detail_page.jpg" width="250"/>
-  <img src="https://github.com/ZahraHeydari/Zest/blob/master/categories_page.jpg" width="250"/>
+  <img src="https://github.com/ZahraHeydari/Zest/blob/master/main_page.png" width="250"/>
+  <img src="https://github.com/ZahraHeydari/Zest/blob/master/detail_page.png" width="250"/>
+  <img src="https://github.com/ZahraHeydari/Zest/blob/master/categories_page.png" width="250"/>
 </p>
 <br>
 <p align="center">
-  <img src="https://github.com/ZahraHeydari/Zest/blob/master/favorites_page.jpg" width="250"/>
-  <img src="https://github.com/ZahraHeydari/Zest/blob/master/search_page.jpg" width="250"/>
+  <img src="https://github.com/ZahraHeydari/Zest/blob/master/favorites_page.png" width="250"/>
+  <img src="https://github.com/ZahraHeydari/Zest/blob/master/search_page.png" width="250"/>
 </p>
 <br>
 <br>

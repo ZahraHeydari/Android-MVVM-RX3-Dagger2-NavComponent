@@ -11,8 +11,8 @@
     <string name="shopping">Shopping List</string>
     <string name="recipes">Recipes</string>
     <string name="about">About</string>
-    <string name="deleted_this_recipe_from_your_favorite_list">Deleted this recipe from your favorite list!</string>
-    <string name="added_this_recipe_to_your_favorite_list">Added this recipe to your favorite list!</string>
+    <string name="deleted_this_recipe_from_your_favorite_list">This recipe was deleted from your favorite list!</string>
+    <string name="added_this_recipe_to_your_favorite_list">This recipe was added to your favorite list!</string>
     <string name="title_activity_splash" translatable="false">SplashActivity</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

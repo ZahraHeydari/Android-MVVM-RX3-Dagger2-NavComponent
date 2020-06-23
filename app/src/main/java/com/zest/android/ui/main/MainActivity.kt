@@ -43,7 +43,6 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
-
         // Creation of the main graph using the application graph
         mainComponent = (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
 
@@ -79,6 +78,7 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
         controller.observe(this, Observer { navController ->
             setupActionBarWithNavController(navController)
         })
+
         currentNavController = controller
 
     }

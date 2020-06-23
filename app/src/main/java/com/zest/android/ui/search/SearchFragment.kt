@@ -20,11 +20,11 @@ import javax.inject.Provider
 /**
  * @Author ZARA.
  */
-class SearchFragment : Fragment(), OnSearchCallback {
+class SearchFragment : Fragment() {
 
 
     private var mQuery: String? = null
-    private var mAdapter = SearchAdapter(this)
+    private var mAdapter = SearchAdapter()
     private var mMenuSearchItem: MenuItem? = null
     lateinit var binding: FragmentSearchBinding
     lateinit var viewModel: RecipeViewModel
@@ -45,10 +45,16 @@ class SearchFragment : Fragment(), OnSearchCallback {
     }
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
         binding.searchRecyclerView.adapter = mAdapter
+
+        arguments?.let {
+            mQuery = SearchFragmentArgs.fromBundle(it).text ?: null
+            mQuery?.let { nonNullSearchQuery ->
+                viewModel.search(nonNullSearchQuery)
+            }
+        }
 
         mAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
 
@@ -58,33 +64,30 @@ class SearchFragment : Fragment(), OnSearchCallback {
             }
         })
 
-        arguments?.let {
-            mQuery = SearchFragmentArgs.fromBundle(it).text ?: null
-            mQuery?.let { nonNullSearchQuery ->
-                viewModel.search(nonNullSearchQuery)
-            }
+        with(viewModel) {
+
+            recipesData.observe(viewLifecycleOwner, Observer {
+                mAdapter.recipes = it
+            })
+
+            isLoading.observe(viewLifecycleOwner, Observer {
+                showProgressBar(it)
+            })
         }
-
-
-        viewModel.recipesData.observe(viewLifecycleOwner, Observer {
-            mAdapter.recipes = it
-        })
 
         return binding.root
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
         inflater.inflate(R.menu.search, menu)
         mMenuSearchItem = menu.findItem(R.id.search)
         val searchView = SearchView((context as MainActivity).supportActionBar?.themedContext)
         searchView.queryHint = getString(R.string.action_search)
         mMenuSearchItem?.actionView = searchView
-
         // These lines are deprecated in API 26 use instead
-        mMenuSearchItem?.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        mMenuSearchItem?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        searchView.isIconified = false
 
         mQuery?.let {
             searchView.setQuery(it, false)
@@ -94,7 +97,6 @@ class SearchFragment : Fragment(), OnSearchCallback {
             override fun onQueryTextSubmit(query: String): Boolean {
                 mQuery = query
                 viewModel.search(mQuery ?: "")
-                mMenuSearchItem?.expandActionView()
                 return false
             }
 
@@ -103,17 +105,14 @@ class SearchFragment : Fragment(), OnSearchCallback {
             }
         })
 
-        searchView.setOnClickListener {
-            //nothing yet
+        searchView.setOnCloseListener {
+            activity?.onBackPressed()
+            false
         }
-
-        searchView.isIconified = false
     }
 
-
-
-    override fun gotoDetailPage(recipe: Recipe) {
-
+    private fun showProgressBar(visibility : Boolean) {
+        if (visibility) binding.searchProgressBar.visibility = View.VISIBLE else View.GONE
     }
 
     private fun checkEmptyView() {

@@ -43,7 +43,6 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         (activity as MainActivity).mainComponent.inject(this)
 
@@ -55,6 +54,7 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCategoryBinding.inflate(inflater)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.categoryRecyclerView.adapter = mAdapter
 
         with(viewModel){

@@ -14,7 +14,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
-    <!-- Empty view show when list is empty -->
+    <!-- Empty view is shown when list is empty -->
     <RelativeLayout
         android:id="@+id/recipes_empty_container"
         android:layout_width="match_parent"

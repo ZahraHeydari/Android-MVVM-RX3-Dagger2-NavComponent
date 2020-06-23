@@ -9,23 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.zest.android.R
-import com.zest.android.RecipesDirections
 import com.zest.android.data.model.Recipe
 import com.zest.android.databinding.FragmentRecipesBinding
-import com.zest.android.ui.category.CategoryFragment
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.main.OnMainCallback
 import com.zest.android.util.NetworkStateReceiver
-import com.zest.android.util.currentNavigationFragment
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -60,7 +52,6 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         (activity as MainActivity).mainComponent.inject(this)
 
@@ -75,6 +66,7 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRecipesBinding.inflate(inflater)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         binding.recipesRecyclerView.adapter = mAdapter
 
         with(viewModel) {

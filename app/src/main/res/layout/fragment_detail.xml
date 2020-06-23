@@ -6,54 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.detail.DetailFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/detail_app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_app_bar_layout_height_size"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/detail_collapsing_toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/detail_toolbar_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    android:scaleType="centerCrop"
-                    app:layout_collapseMode="parallax" />
-
-                <ImageView
-                    android:id="@+id/detail_toolbar_transparent_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/detail_toolbar_transparent_image_height_size"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/background_transparent" />
-
-            </RelativeLayout>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/detail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/AppToolbarStyle" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/detail_nested_scroll_view"
@@ -67,6 +20,28 @@
             android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/detail_image_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/detail_toolbar_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/detail_toolbar_transparent_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/detail_toolbar_transparent_image_height_size"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/background_transparent" />
+
+            </RelativeLayout>
 
             <!--Tag-->
             <androidx.cardview.widget.CardView
@@ -108,7 +83,6 @@
 
             </androidx.cardview.widget.CardView>
 
-
             <!--Instructions-->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -126,7 +100,7 @@
                     android:layout_margin="16dp"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/detail_instructions_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,7 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:srcCompat="@drawable/ic_star_empty_white_vector"
-        app:layout_anchor="@id/detail_app_bar_layout"
+        app:layout_anchor="@id/detail_image_container"
         app:layout_anchorGravity="bottom|end" />
 
 

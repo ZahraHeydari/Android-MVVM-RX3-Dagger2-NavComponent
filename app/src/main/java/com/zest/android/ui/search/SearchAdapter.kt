@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
  *
  * Created by ZARA
  */
-class SearchAdapter(private val callback: OnSearchCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var recipes: List<Recipe> by Delegates.observable(emptyList()) { property, oldValue, newValue ->
         notifyDataSetChanged()

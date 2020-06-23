@@ -27,7 +27,7 @@ import javax.inject.Provider
 /**
  * @Author ZARA.
  */
-class DetailFragment : Fragment(), OnDetailCallback {
+class DetailFragment : Fragment() {
 
 
     private var mRecipe: Recipe? = null
@@ -44,18 +44,16 @@ class DetailFragment : Fragment(), OnDetailCallback {
         (activity as MainActivity).mainComponent.inject(this)
 
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                    viewModelProvider.get() as T
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = viewModelProvider.get() as T
         }).get(RecipeViewModel::class.java)
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDetailBinding.inflate(layoutInflater)
-        binding.detailToolbar.setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-
         arguments?.let {
             mRecipe = DetailFragmentArgs.fromBundle(it).recipe
+            (activity as MainActivity).supportActionBar?.title = mRecipe?.title
             binding.detailInstructionsTextView.text = mRecipe?.instructions
 
             mRecipe?.let { nonNullRecipe ->
@@ -68,9 +66,8 @@ class DetailFragment : Fragment(), OnDetailCallback {
 
 
                 val tags = viewModel.loadTags(nonNullRecipe)
-                if (tags.isNullOrEmpty()) {
-                    binding.detailTagsContainer.visibility = View.GONE
-                } else {
+                if (tags.isNullOrEmpty()) binding.detailTagsContainer.visibility = View.GONE
+                else {
                     ChipCloud.Configure()
                             .chipCloud(binding.detailTagChipCloud)
                             .labels(tags)
@@ -100,12 +97,6 @@ class DetailFragment : Fragment(), OnDetailCallback {
     }
 
 
-    override fun showMessage(stringRes: Int) {
-        Snackbar.make(binding.detailCollapsingToolbarLayout, getString(stringRes),
-                Snackbar.LENGTH_LONG).setAction("Action", null).show()
-    }
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.detail, menu)
     }
@@ -115,7 +106,7 @@ class DetailFragment : Fragment(), OnDetailCallback {
 
         override fun chipSelected(i: Int) {
             Log.d(TAG, "chipSelected() called with: i = [$i] Tags: ${tags[i]})")
-            Navigation.findNavController(binding.detailTagChipCloud).navigate(R.id.searchFragment,bundleOf("text" to tags[i]))
+            findNavController().navigate(R.id.searchFragment, bundleOf("text" to tags[i]))
         }
 
         override fun chipDeselected(i: Int) {

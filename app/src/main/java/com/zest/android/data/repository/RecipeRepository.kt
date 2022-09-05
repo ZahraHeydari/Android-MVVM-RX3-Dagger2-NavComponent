@@ -6,10 +6,9 @@ import com.zest.android.data.source.local.AppDatabase
 import com.zest.android.data.source.remote.APIResponse
 import com.zest.android.data.source.remote.APIService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -19,10 +18,10 @@ import javax.inject.Inject
  * web services, and caches.
  * @Author ZARA.
  */
-class RecipeRepository @Inject constructor(var apiService: APIService, var appDatabase: AppDatabase) {
-
-
-
+class RecipeRepository @Inject constructor(
+    private var apiService: APIService,
+    private var appDatabase: AppDatabase
+) {
     fun insertFavorite(recipe: Recipe) {
         appDatabase.recipeDao.insert(recipe)
     }
@@ -39,27 +38,29 @@ class RecipeRepository @Inject constructor(var apiService: APIService, var appDa
         appDatabase.recipeDao.delete(recipe)
     }
 
-
     fun getRecipes(
-            compositeDisposable: io.reactivex.rxjava3.disposables.CompositeDisposable,
-            input: String,
-            onResponse: APIResponse<RecipeResponse>
-    ): io.reactivex.rxjava3.disposables.Disposable {
-        return apiService.getRecipes(input)
-                .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+        compositeDisposable: CompositeDisposable,
+        input: String,
+        fromSearch: Boolean,
+        onResponse: APIResponse<RecipeResponse>
+    ): Disposable {
+        val result = RecipeResponse()
+        return apiService.run {
+            if (fromSearch) this.search(input) else this.getRecipes(input)
+        }.run {
+            this.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .repeat(10)
+                .doOnNext {
+                    result.recipes.add(it.recipes.first())
+                }
                 .subscribe({
-                    onResponse.onSuccess(it)
+                    onResponse.onSuccess(result)
                 }, {
                     onResponse.onError(it)
                 }).also {
                     compositeDisposable.add(it)
                 }
-
-    }
-
-    companion object {
-
-        private val TAG = RecipeRepository::class.java.simpleName
+        }
     }
 }

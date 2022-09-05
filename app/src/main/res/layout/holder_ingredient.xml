@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.AppCompatCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ingredient_check_box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_margin="8dp"
+    android:layoutDirection="rtl"
+    android:textColor="@color/colorTextSecondary"
     android:textDirection="rtl"
-    android:layoutDirection="rtl">
-
-
-    <CheckBox
-        android:textSize="@dimen/body1"
-        android:textColor="@color/colorTextSecondary"
-        android:layout_margin="8dp"
-        android:layout_alignParentStart="true"
-        android:id="@+id/ingredient_check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-</RelativeLayout>
+    android:textSize="@dimen/body1" />

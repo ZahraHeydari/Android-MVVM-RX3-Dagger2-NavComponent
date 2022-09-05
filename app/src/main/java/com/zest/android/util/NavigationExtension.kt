@@ -3,7 +3,6 @@ package com.zest.android.util
 import android.content.Intent
 import android.util.SparseArray
 import androidx.core.util.forEach
-import androidx.core.util.set
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
@@ -28,7 +27,6 @@ fun BottomNavigationView.setupWithNavController(
     val graphIdToTagMap = SparseArray<String>()
     // Result. Mutable live data with the selected controlled
     val selectedNavController = MutableLiveData<NavController>()
-
     var firstFragmentGraphId = 0
 
     // First create a NavHostFragment for each NavGraph ID
@@ -171,7 +169,7 @@ private fun BottomNavigationView.setupItemReselected(
         val navController = selectedFragment.navController
         // Pop the back stack to the start destination of the current navController graph
         navController.popBackStack(
-                navController.graph.startDestination, false
+                navController.graph.startDestinationId, false
         )
     }
 }
@@ -198,7 +196,6 @@ private fun attachNavHostFragment(
                 }
             }
             .commitNow()
-
 }
 
 private fun obtainNavHostFragment(
@@ -230,7 +227,6 @@ private fun FragmentManager.isOnBackStack(backStackName: String): Boolean {
 }
 
 private fun getFragmentTag(index: Int) = "bottomNavigation#$index"
-
 
 val FragmentManager.currentNavigationFragment: Fragment?
     get() = primaryNavigationFragment?.childFragmentManager?.fragments?.first()

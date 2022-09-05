@@ -11,8 +11,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val recipeDao: RecipeDao
 
     companion object {
-
         val DB_NAME = "ZestDatabase.db"
-
     }
 }

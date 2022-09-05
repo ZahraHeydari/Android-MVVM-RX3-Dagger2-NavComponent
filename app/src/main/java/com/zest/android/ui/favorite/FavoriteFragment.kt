@@ -17,6 +17,8 @@ import com.zest.android.databinding.FragmentFavoriteBinding
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.main.OnMainCallback
 import com.zest.android.ui.recipes.RecipeViewModel
+import kotlinx.android.synthetic.main.empty_view.*
+import kotlinx.android.synthetic.main.fragment_favorite.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -27,7 +29,6 @@ import javax.inject.Provider
  */
 class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
 
-
     private var mCallback: OnMainCallback? = null
     private lateinit var binding: FragmentFavoriteBinding
     private var mAdapter = FavoriteAdapter(this)
@@ -35,7 +36,6 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
 
     @Inject
     lateinit var viewModelProvider: Provider<RecipeViewModel>
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,8 +53,8 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
         (activity as MainActivity).mainComponent.inject(this)
 
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = viewModelProvider.get() as T
-        }).get(RecipeViewModel::class.java)
+            override fun <T : ViewModel> create(modelClass: Class<T>): T = viewModelProvider.get() as T
+        })[RecipeViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,7 +63,6 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
         binding.favoriteRecyclerView.adapter = mAdapter
 
         mAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-
             override fun onChanged() {
                 super.onChanged()
                 checkEmptyView()
@@ -80,14 +79,16 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
         with(viewModel) {
             loadFavoriteItems()
 
-            recipesData.observe(viewLifecycleOwner, Observer {
-                mAdapter.recipes = it
-            })
+            recipesData.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    mAdapter.recipes = it
+                }
+            }
         }
     }
 
     private fun checkEmptyView() {
-        binding.favoriteEmptyContainer.visibility = if (mAdapter.itemCount == 0) View.VISIBLE else View.GONE
+        favorite_empty_view.visibility = if (mAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun showDeleteFavoriteDialog(recipe: Recipe) {
@@ -110,29 +111,19 @@ class FavoriteFragment : Fragment(), OnFavoriteFragmentInteractionListener {
         builder.show()
     }
 
-
-
     override fun isFavorited(recipe: Recipe): Boolean = viewModel.isFavorited(recipe)
-
 
     override fun gotoDetailPage(recipe: Recipe) {
         findNavController().navigate(FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(recipe))
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.favorites, menu)
     }
-
 
     override fun onDetach() {
         super.onDetach()
         mCallback = null
         viewModel.dispose()
-    }
-
-    companion object {
-
-        val TAG = FavoriteFragment::class.java.name
     }
 }

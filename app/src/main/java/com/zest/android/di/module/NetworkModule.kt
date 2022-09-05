@@ -52,11 +52,9 @@ object NetworkModule {
     @JvmStatic
     fun provideMoshi() = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
-
     @Provides
     @JvmStatic
     fun provideMoshiConverter(moshi: Moshi) = MoshiConverterFactory.create(moshi)
-
 
     @Provides
     @Singleton

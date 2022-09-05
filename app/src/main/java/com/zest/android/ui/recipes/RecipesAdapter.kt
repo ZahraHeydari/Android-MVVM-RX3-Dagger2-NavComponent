@@ -17,16 +17,16 @@ import kotlin.properties.Delegates
  *
  * Created by ZARA
  */
-internal class RecipesAdapter(private val listener: OnRecipesFragmentInteractionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+internal class RecipesAdapter(private val listener: OnRecipesFragmentInteractionListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var recipes: List<Recipe> by Delegates.observable(emptyList()) { property, oldValue, newValue ->
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val holderRecipeBinding = HolderRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val holderRecipeBinding =
+            HolderRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return RecipeViewHolder(holderRecipeBinding)
     }
 
@@ -36,17 +36,17 @@ internal class RecipesAdapter(private val listener: OnRecipesFragmentInteraction
 
     private fun getItem(position: Int): Recipe = recipes[position]
 
-
     override fun getItemCount(): Int = recipes.size
 
-
-    inner class RecipeViewHolder(private val binding: HolderRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class RecipeViewHolder(private val binding: HolderRecipeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(recipe: Recipe) {
-
             binding.recipeTitleTextView.text = recipe.title
 
-            if (listener.isFavorited(recipe)) binding.recipeFavoriteImageView.setBackgroundResource(R.drawable.ic_star_full_vector)
+            if (listener.isFavorited(recipe)) binding.recipeFavoriteImageView.setBackgroundResource(
+                R.drawable.ic_star_full_vector
+            )
             else binding.recipeFavoriteImageView.setBackgroundResource(R.drawable.ic_star_gray_empty_vector)
 
             binding.recipeFavoriteImageView.setOnClickListener {

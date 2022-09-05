@@ -8,7 +8,5 @@ import com.zest.android.data.model.Category
  * Created by ZARA
  */
 interface OnCategoryFragmentInteractionListener {
-
     fun showSubCategories(category: Category)
-
 }

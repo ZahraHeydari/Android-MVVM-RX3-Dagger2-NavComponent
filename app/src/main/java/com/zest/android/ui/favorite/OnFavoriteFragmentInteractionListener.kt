@@ -8,11 +8,7 @@ import com.zest.android.data.model.Recipe
  * Created by ZARA
  */
 interface OnFavoriteFragmentInteractionListener {
-
     fun gotoDetailPage(recipe: Recipe)
-
     fun showDeleteFavoriteDialog(recipe: Recipe)
-
     fun isFavorited(recipe: Recipe): Boolean
-
 }

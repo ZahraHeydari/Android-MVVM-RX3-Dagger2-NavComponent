@@ -7,9 +7,6 @@ import com.zest.android.di.component.AppComponent
 import com.zest.android.di.component.AppComponentProvider
 import com.zest.android.di.component.DaggerAppComponent
 
-/**
- * @Author ZARA.
- */
 class MainApplication : Application(), AppComponentProvider {
 
     private lateinit var appComponent: AppComponent
@@ -17,9 +14,7 @@ class MainApplication : Application(), AppComponentProvider {
     override fun onCreate() {
         super.onCreate()
         MultiDex.install(this)
-
-        appComponent = DaggerAppComponent.factory().create(this).also {
-            it.inject(this) }
+        appComponent = DaggerAppComponent.factory().create(this).also { it.inject(this) }
     }
 
     override fun attachBaseContext(base: Context) {
@@ -28,5 +23,4 @@ class MainApplication : Application(), AppComponentProvider {
     }
 
     override fun provideAppComponent(): AppComponent = appComponent
-
 }

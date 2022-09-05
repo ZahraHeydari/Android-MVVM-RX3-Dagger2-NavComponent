@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.zest.android.data.repository.CategoryRepository
 import com.zest.android.data.model.Category
 import com.zest.android.data.model.CategoryResponse
-import com.zest.android.data.model.RecipeResponse
 import com.zest.android.data.source.remote.APIResponse
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
 
-
-class CategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) : ViewModel() {
-
+class CategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) :
+    ViewModel() {
 
     private val categoryData = MutableLiveData<Category>()
     val category: LiveData<Category> = categoryData
@@ -22,20 +20,21 @@ class CategoryViewModel @Inject constructor(private val categoryRepository: Cate
     val categoryList: LiveData<List<Category>> = categoryListData
     private val compositeDisposable = CompositeDisposable()
 
-
     fun loadCategories() {
         showLoading(true)
-        categoryRepository.loadRootCategories(compositeDisposable, object : APIResponse<CategoryResponse> {
-            override fun onSuccess(result: CategoryResponse?) {
-                showLoading(false)
-                categoryListData.value = result?.categories
-            }
+        categoryRepository.loadRootCategories(
+            compositeDisposable,
+            object : APIResponse<CategoryResponse> {
+                override fun onSuccess(result: CategoryResponse?) {
+                    showLoading(false)
+                    categoryListData.value = result?.categories
+                }
 
-            override fun onError(t: Throwable) {
-                showLoading(false)
-                t.printStackTrace()
-            }
-        })
+                override fun onError(t: Throwable) {
+                    showLoading(false)
+                    t.printStackTrace()
+                }
+            })
     }
 
     private fun showLoading(isVisible: Boolean) {
@@ -43,9 +42,8 @@ class CategoryViewModel @Inject constructor(private val categoryRepository: Cate
     }
 
     fun dispose() {
-        if(compositeDisposable.isDisposed){
+        if (compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
     }
-
 }

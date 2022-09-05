@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.zest.android">
 
     <!-- Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
 
     <application
         android:name="com.zest.android.MainApplication"
@@ -17,26 +17,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="236b16296bcdaebec9e1d93b4dd79388545d9dd0" />
 
         <activity
-            android:name="com.zest.android.ui.splash.SplashActivity"
+            android:name="com.zest.android.ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeFullScreen">
+            android:theme="@style/AppThemeFullScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.zest.android.ui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

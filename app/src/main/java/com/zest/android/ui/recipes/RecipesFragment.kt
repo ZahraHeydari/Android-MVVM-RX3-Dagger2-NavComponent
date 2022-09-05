@@ -5,8 +5,8 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,6 +18,8 @@ import com.zest.android.databinding.FragmentRecipesBinding
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.main.OnMainCallback
 import com.zest.android.util.NetworkStateReceiver
+import kotlinx.android.synthetic.main.empty_view.*
+import kotlinx.android.synthetic.main.fragment_recipes.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -27,8 +29,7 @@ import javax.inject.Provider
  * Created by ZARA
  */
 class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverListener,
-        OnRecipesFragmentInteractionListener {
-
+    OnRecipesFragmentInteractionListener {
 
     private var mAdapter = RecipesAdapter(this)
     private var mCallback: OnMainCallback? = null
@@ -38,7 +39,6 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
 
     @Inject
     lateinit var viewModelProvider: Provider<RecipeViewModel>
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,15 +56,22 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         (activity as MainActivity).mainComponent.inject(this)
 
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = viewModelProvider.get() as T
-        }).get(RecipeViewModel::class.java)
-
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                viewModelProvider.get() as T
+        })[RecipeViewModel::class.java]
 
         mNetworkReceiver.addListener(this)
-        context?.registerReceiver(mNetworkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        context?.registerReceiver(
+            mNetworkReceiver,
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentRecipesBinding.inflate(inflater)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         binding.recipesRecyclerView.adapter = mAdapter
@@ -72,17 +79,18 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         with(viewModel) {
             getMainRecipes()
 
-            recipesData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                mAdapter.recipes = it
-            })
+            recipesData.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    mAdapter.recipes = it
+                }
+            }
 
-            isLoading.observe(viewLifecycleOwner, Observer {
+            isLoading.observe(viewLifecycleOwner) {
                 binding.recipesProgressBar.visibility = if (it == true) View.VISIBLE else View.GONE
-            })
+            }
         }
 
         mAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-
             override fun onChanged() {
                 super.onChanged()
                 checkEmptyView()
@@ -92,13 +100,16 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         return binding.root
     }
 
-
     override fun showMessage(message: Int) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).setAction("Action", null).show()
     }
 
     override fun gotoDetailPage(recipe: Recipe) {
-        findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToDetailFragment(recipe))
+        findNavController().navigate(
+            RecipesFragmentDirections.actionRecipesFragmentToDetailFragment(
+                recipe
+            )
+        )
     }
 
     override fun loadFavorite(recipe: Recipe): Recipe? {
@@ -123,13 +134,13 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
     }
 
     override fun networkUnavailable() {
-        //nothing yet
+        Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show()
     }
 
     private fun checkEmptyView() {
-        binding.recipesEmptyContainer.visibility = if (mAdapter.itemCount == 0) View.VISIBLE else View.GONE
+        recipes_empty_view.visibility =
+            if (mAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.recipes, menu)
@@ -138,18 +149,13 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search -> {
-                gotoSearchPage()
+                if (findNavController().currentDestination?.id == R.id.recipesFragment) {
+                    findNavController().navigate(R.id.action_recipesFragment_to_searchFragment)
+                }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-
-    private fun gotoSearchPage() {
-        if (findNavController().currentDestination?.id == R.id.recipesFragment) {
-            findNavController().navigate(R.id.action_recipesFragment_to_searchFragment)
-        }
     }
 
     override fun onDestroy() {
@@ -162,14 +168,8 @@ class RecipesFragment : Fragment(), NetworkStateReceiver.OnNetworkStateReceiverL
         context?.unregisterReceiver(mNetworkReceiver)
     }
 
-
     override fun onDetach() {
         super.onDetach()
         mCallback = null
-    }
-
-    companion object {
-
-        private val TAG = RecipesFragment::class.java.name
     }
 }

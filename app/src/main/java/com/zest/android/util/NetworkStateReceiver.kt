@@ -4,12 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.util.Log
 import java.util.*
 
 class NetworkStateReceiver : BroadcastReceiver() {
 
-    private val TAG = NetworkStateReceiver::class.java.simpleName
     private var listeners: MutableSet<OnNetworkStateReceiverListener> = HashSet()
     private var connected: Boolean? = null
 
@@ -33,7 +31,6 @@ class NetworkStateReceiver : BroadcastReceiver() {
 
     fun addListener(listener: OnNetworkStateReceiverListener) {
         listeners.add(listener)
-        //notifyState(listener)
     }
 
     fun removeListener(listener: OnNetworkStateReceiverListener) {
@@ -41,10 +38,7 @@ class NetworkStateReceiver : BroadcastReceiver() {
     }
 
     interface OnNetworkStateReceiverListener {
-
         fun networkAvailable()
-
         fun networkUnavailable()
     }
-
 }

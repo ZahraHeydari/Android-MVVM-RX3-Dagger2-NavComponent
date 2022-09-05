@@ -18,15 +18,15 @@ import kotlin.properties.Delegates
  *
  * Created by ZARA
  */
-class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var recipes: List<Recipe> by Delegates.observable(emptyList()) { property, oldValue, newValue ->
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val holderSearchBinding = HolderSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val holderSearchBinding =
+            HolderSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchViewHolder(holderSearchBinding)
     }
 
@@ -38,24 +38,19 @@ class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = recipes.size
 
-    inner class SearchViewHolder(val binding: HolderSearchBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class SearchViewHolder(val binding: HolderSearchBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(recipe: Recipe) {
-
             binding.searchTextView.text = recipe.title
             binding.searchImageView.load(recipe.image) {
                 placeholder(R.color.whiteSmoke)
             }
 
             itemView.setOnClickListener {
-                Navigation.findNavController(itemView).navigate(R.id.detailFragment,bundleOf("recipe" to recipe))
+                Navigation.findNavController(itemView)
+                    .navigate(R.id.detailFragment, bundleOf("recipe" to recipe))
             }
         }
     }
-
-    companion object {
-
-        private val TAG = SearchAdapter::class.java.name
-    }
-
 }

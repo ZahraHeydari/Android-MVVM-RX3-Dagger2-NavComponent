@@ -10,7 +10,6 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-
 @AppScope
 @Singleton
 @Component(modules = [
@@ -25,10 +24,8 @@ interface AppComponent {
 
     fun mainComponent(): MainComponent.Factory
 
-
     @Component.Factory
     interface Factory {
-
         fun create(@BindsInstance app: Application): AppComponent
     }
 }

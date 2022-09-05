@@ -18,7 +18,6 @@ import kotlin.properties.Delegates
  */
 internal class FavoriteAdapter(private val listener: OnFavoriteFragmentInteractionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
     var recipes: List<Recipe> by Delegates.observable(emptyList()) { property, oldValue, newValue ->
         notifyDataSetChanged()
     }
@@ -44,11 +43,9 @@ internal class FavoriteAdapter(private val listener: OnFavoriteFragmentInteracti
         }
     }
 
-
     inner class FavoriteViewHolder(private val binding: HolderFavoriteBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(recipe: Recipe) {
-
             binding.favoriteTitleTextView.text = recipe.title
 
             binding.favoriteImageView.load(recipe.image) {

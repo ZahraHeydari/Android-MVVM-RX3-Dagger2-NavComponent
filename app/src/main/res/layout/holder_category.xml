@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/category_image_card_view"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="16dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    tools:ignore="RtlCompat"
+    tools:targetApi="lollipop">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/category_image_card_view"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/category_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@color/lightGray"
+        android:scaleType="centerCrop" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/category_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:elevation="2dp"
-        app:cardCornerRadius="16dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        tools:ignore="RtlCompat">
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:text="@{categoryViewModel.title}"
+        android:textAlignment="center"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/title" />
 
-        <ImageView
-            android:id="@+id/category_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lightGray"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/category_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/transparent"
-            android:gravity="center"
-            android:text="@{categoryViewModel.title}"
-            android:textAlignment="center"
-            android:textColor="@color/whiteSmoke"
-            android:textSize="@dimen/title" />
-
-    </androidx.cardview.widget.CardView>
-
-</FrameLayout>
+</androidx.cardview.widget.CardView>
 

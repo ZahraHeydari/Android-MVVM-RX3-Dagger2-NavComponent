@@ -12,23 +12,19 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
-
 @Module
 abstract class BinderModule {
 
     @Binds
     abstract fun bindContext(app: Application): Context
 
-
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
 
     @Binds
     @IntoMap
     @ViewModelKey(RecipeViewModel::class)
     abstract fun bindRecipeViewModel(recipeViewModel: RecipeViewModel): ViewModel
-
 
     @Binds
     @IntoMap

@@ -1,6 +1,7 @@
 package com.zest.android.ui.recipes
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zest.android.data.model.Recipe
@@ -10,41 +11,44 @@ import com.zest.android.data.source.remote.APIResponse
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRepository) : ViewModel() {
+class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRepository) :
+    ViewModel() {
 
-    val recipesData = MutableLiveData<List<Recipe>>()
+    val recipesData = MutableLiveData<List<Recipe>?>()
     val isLoading = MutableLiveData(false)
     private val compositeDisposable = CompositeDisposable()
-
-
-    fun getMainRecipes() {
-        fetchRecipesData(generateRandomChar().toString())
-    }
-
-    fun search(query: String) {
-        fetchRecipesData(query)
-    }
 
     private fun generateRandomChar(): Char {
         return ('a' + (Math.random() * ('z' - 'a' + 1)).toInt())
     }
 
-
-    private fun fetchRecipesData(query: String) {
-        setLoading(true)
-        recipeRepository.getRecipes(compositeDisposable, query, object : APIResponse<RecipeResponse> {
-            override fun onSuccess(result: RecipeResponse?) {
-                setLoading(false)
-                recipesData.value = result?.recipes
-            }
-
-            override fun onError(t: Throwable) {
-                setLoading(false)
-                t.printStackTrace()
-            }
-        })
+    fun getMainRecipes() {
+        fetchRecipesData(generateRandomChar().toString(), false)
     }
 
+    fun search(query: String) {
+        fetchRecipesData(query, true)
+    }
+
+    private fun fetchRecipesData(query: String, fromSearch: Boolean) {
+        setLoading(true)
+        recipeRepository.getRecipes(
+            compositeDisposable,
+            query,
+            fromSearch,
+            object : APIResponse<RecipeResponse> {
+                override fun onSuccess(result: RecipeResponse?) {
+                    Log.d("RecipeResponse", "onSuccess() called with: result = $result")
+                    setLoading(false)
+                    recipesData.value = result?.recipes
+                }
+
+                override fun onError(t: Throwable) {
+                    setLoading(false)
+                    t.printStackTrace()
+                }
+            })
+    }
 
     fun loadFavoriteItems() {
         val recipes: MutableList<Recipe> = recipeRepository.loadAllFavorites()
@@ -81,10 +85,6 @@ class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRe
     }
 
     fun dispose() {
-        if(compositeDisposable.isDisposed) compositeDisposable.dispose()
-    }
-
-    companion object {
-        private val TAG = RecipeViewModel::class.java.name
+        if (compositeDisposable.isDisposed) compositeDisposable.dispose()
     }
 }

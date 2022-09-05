@@ -17,8 +17,8 @@ import kotlin.properties.Delegates
  *
  * Created by ZARA
  */
-class CategoryAdapter(private val listener: OnCategoryFragmentInteractionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class CategoryAdapter(private val listener: OnCategoryFragmentInteractionListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var categories: List<Category> by Delegates.observable(emptyList()) { property, oldValue, newValue ->
         notifyDataSetChanged()
@@ -35,20 +35,15 @@ class CategoryAdapter(private val listener: OnCategoryFragmentInteractionListene
 
     private fun getItem(position: Int): Category = categories[position]
 
-
     override fun getItemCount() = categories.size
 
-
-    private inner class CategoryViewHolder(private val binding: HolderCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    private inner class CategoryViewHolder(private val binding: HolderCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun onBind(category: Category) {
-
             binding.categoryImageView.load(category.image) {
                 placeholder(R.color.whiteSmoke)
             }
-
             binding.categoryTextView.text = category.title
-
             itemView.setOnClickListener {
                 listener.showSubCategories(category)
             }

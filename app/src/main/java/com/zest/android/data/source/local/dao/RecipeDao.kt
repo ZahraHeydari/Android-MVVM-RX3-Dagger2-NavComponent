@@ -3,10 +3,8 @@ package com.zest.android.data.source.local.dao
 import androidx.room.*
 import com.zest.android.data.model.Recipe
 
-
 @Dao
 interface RecipeDao {
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recipe: Recipe)
@@ -22,5 +20,4 @@ interface RecipeDao {
 
     @Update
     fun update(recipe: Recipe)
-
 }

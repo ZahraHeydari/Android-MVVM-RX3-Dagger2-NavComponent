@@ -1,50 +1,53 @@
 package com.zest.android.ui.main
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.zest.android.CategoryDirections
-import com.zest.android.LifecycleLoggingActivity
 import com.zest.android.MainApplication
 import com.zest.android.R
 import com.zest.android.data.model.Category
 import com.zest.android.databinding.ActivityMainBinding
 import com.zest.android.di.component.MainComponent
-import com.zest.android.util.currentNavigationFragment
 import com.zest.android.util.setupWithNavController
+import kotlinx.android.synthetic.main.activity_main.*
 
-
-/**
- * @Author ZARA.
- */
-class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
-
+class MainActivity : AppCompatActivity(), OnMainCallback {
 
     lateinit var mainComponent: MainComponent
     private lateinit var binding: ActivityMainBinding
     private var currentNavController: LiveData<NavController>? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val zoomIn = AnimationUtils.loadAnimation(this, R.anim.zoom_in)
+        binding.splashImageView.animation = zoomIn
+        binding.splashImageView.startAnimation(zoomIn)
+
+        Handler().postDelayed({
+            main_container.visibility = View.VISIBLE
+            splash_container.visibility = View.GONE
+        }, SPLASH_DISPLAY_LENGTH)
+
         setSupportActionBar(binding.mainToolbar)
 
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
         // Creation of the main graph using the application graph
-        mainComponent = (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
+        mainComponent =
+            (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
 
         // Make Dagger instantiate @Inject fields in MainActivity
         mainComponent.inject(this)
@@ -52,26 +55,24 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
-
     }
-
 
     /**
      * Called on first creation and when restoring state.
      */
     private fun setupBottomNavigationBar() {
-
         val navGraphIds = listOf(
-                R.navigation.recipes,
-                R.navigation.category,
-                R.navigation.favorites)
+            R.navigation.recipes,
+            R.navigation.category,
+            R.navigation.favorites
+        )
 
         // Setup the bottom navigation view with a list of navigation graphs
         val controller = binding.mainBottomNavigationView.setupWithNavController(
-                navGraphIds = navGraphIds,
-                fragmentManager = supportFragmentManager,
-                containerId = R.id.nav_host_fragment_container,
-                intent = intent
+            navGraphIds = navGraphIds,
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.nav_host_fragment_container,
+            intent = intent
         )
 
         // Whenever the selected controller changes, setup the action bar.
@@ -110,20 +111,14 @@ class MainActivity : LifecycleLoggingActivity(), OnMainCallback {
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun gotoSubCategories(category: Category) {
         if (findNavController(R.id.nav_host_fragment_container).currentDestination?.id == R.id.categoryFragment) {
             findNavController(R.id.nav_host_fragment_container)
-                    .navigate(CategoryDirections.actionCategoryFragmentToSearchFragment(category.title))
+                .navigate(CategoryDirections.actionCategoryFragmentToSearchFragment(category.title))
         }
     }
 
     companion object {
-
-        private val TAG = MainActivity::class.java.name
-
-        fun start(context: Context) {
-            context.startActivity(Intent(context, MainActivity::class.java))
-        }
+        private const val SPLASH_DISPLAY_LENGTH: Long = 5000
     }
 }

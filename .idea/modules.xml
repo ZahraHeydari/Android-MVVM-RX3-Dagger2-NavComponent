@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/Zest_Android(kotlin-mvvm-databinding-room).iml" filepath="$PROJECT_DIR$/Zest_Android(kotlin-mvvm-databinding-room).iml" group="Zest_Android(kotlin-mvvm-databinding-room)" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Zest_Android(kotlin-mvvm-databinding-room)/app" />
-    </modules>
-  </component>
-</project>

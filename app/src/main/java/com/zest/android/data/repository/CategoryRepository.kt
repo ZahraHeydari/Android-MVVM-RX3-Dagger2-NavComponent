@@ -16,29 +16,23 @@ import javax.inject.Inject
  *
  * @Author ZARA.
  */
-class CategoryRepository @Inject constructor(private var apiService: APIService,
-                                             var appDatabase: AppDatabase) {
-
-
+class CategoryRepository @Inject constructor(
+    private var apiService: APIService,
+    var appDatabase: AppDatabase
+) {
     fun loadRootCategories(
-            compositeDisposable: CompositeDisposable,
-            onResponse: APIResponse<CategoryResponse>
+        compositeDisposable: CompositeDisposable,
+        onResponse: APIResponse<CategoryResponse>
     ): io.reactivex.rxjava3.disposables.Disposable {
         return apiService.categories
-                .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    onResponse.onSuccess(it)
-                }, {
-                    onResponse.onError(it)
-                }).also {
-                    compositeDisposable.add(it)
-                }
-
-    }
-
-
-    companion object {
-        private val TAG = CategoryRepository::class.java.name
+            .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                onResponse.onSuccess(it)
+            }, {
+                onResponse.onError(it)
+            }).also {
+                compositeDisposable.add(it)
+            }
     }
 }

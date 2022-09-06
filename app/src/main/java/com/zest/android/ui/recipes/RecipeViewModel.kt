@@ -1,7 +1,6 @@
 package com.zest.android.ui.recipes
 
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zest.android.data.model.Recipe
@@ -38,7 +37,6 @@ class RecipeViewModel @Inject constructor(private val recipeRepository: RecipeRe
             fromSearch,
             object : APIResponse<RecipeResponse> {
                 override fun onSuccess(result: RecipeResponse?) {
-                    Log.d("RecipeResponse", "onSuccess() called with: result = $result")
                     setLoading(false)
                     recipesData.value = result?.recipes
                 }

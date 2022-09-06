@@ -1,16 +1,15 @@
 package com.zest.android.ui.category
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.zest.android.CategoryDirections
 import com.zest.android.R
 import com.zest.android.data.model.Category
 import com.zest.android.databinding.FragmentCategoryBinding
 import com.zest.android.ui.main.MainActivity
-import com.zest.android.ui.main.OnMainCallback
+import com.zest.android.util.viewModelProvider
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -22,31 +21,16 @@ import javax.inject.Provider
 class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
 
     private var mAdapter = CategoryAdapter(this)
-    private var mCallback: OnMainCallback? = null
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var viewModel: CategoryViewModel
 
     @Inject
     lateinit var viewModelProvider: Provider<CategoryViewModel>
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnMainCallback) {
-            mCallback = context
-        } else {
-            throw ClassCastException("$context must implement OnMainCallback!")
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         (activity as MainActivity).mainComponent.inject(this)
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                viewModelProvider.get() as T
-        })[CategoryViewModel::class.java]
+        viewModel = this.viewModelProvider(viewModelProvider)
     }
 
     override fun onCreateView(
@@ -73,20 +57,13 @@ class CategoryFragment : Fragment(), OnCategoryFragmentInteractionListener {
     }
 
     override fun showSubCategories(category: Category) {
-        mCallback?.gotoSubCategories(category)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.category, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+        if (findNavController().currentDestination?.id == R.id.categoryFragment) {
+            findNavController().navigate(CategoryDirections.actionCategoryFragmentToSearchFragment(category.title))
+        }
     }
 
     override fun onDetach() {
         super.onDetach()
-        mCallback = null
         viewModel.dispose()
     }
 }

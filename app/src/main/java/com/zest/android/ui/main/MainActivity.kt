@@ -2,7 +2,6 @@ package com.zest.android.ui.main
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -10,18 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.zest.android.CategoryDirections
 import com.zest.android.MainApplication
 import com.zest.android.R
-import com.zest.android.data.model.Category
 import com.zest.android.databinding.ActivityMainBinding
 import com.zest.android.di.component.MainComponent
 import com.zest.android.util.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), OnMainCallback {
+class MainActivity : AppCompatActivity() {
 
     lateinit var mainComponent: MainComponent
     private lateinit var binding: ActivityMainBinding
@@ -46,8 +42,7 @@ class MainActivity : AppCompatActivity(), OnMainCallback {
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
         // Creation of the main graph using the application graph
-        mainComponent =
-            (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
+        mainComponent = (applicationContext as MainApplication).provideAppComponent().mainComponent().create()
 
         // Make Dagger instantiate @Inject fields in MainActivity
         mainComponent.inject(this)
@@ -81,7 +76,6 @@ class MainActivity : AppCompatActivity(), OnMainCallback {
         })
 
         currentNavController = controller
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -96,12 +90,6 @@ class MainActivity : AppCompatActivity(), OnMainCallback {
         setupBottomNavigationBar()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -109,13 +97,6 @@ class MainActivity : AppCompatActivity(), OnMainCallback {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun gotoSubCategories(category: Category) {
-        if (findNavController(R.id.nav_host_fragment_container).currentDestination?.id == R.id.categoryFragment) {
-            findNavController(R.id.nav_host_fragment_container)
-                .navigate(CategoryDirections.actionCategoryFragmentToSearchFragment(category.title))
-        }
     }
 
     companion object {

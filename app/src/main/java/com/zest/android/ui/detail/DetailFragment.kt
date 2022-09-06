@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.api.load
 import com.adroitandroid.chipcloud.ChipCloud
@@ -16,6 +14,7 @@ import com.zest.android.data.model.Recipe
 import com.zest.android.databinding.FragmentDetailBinding
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.recipes.RecipeViewModel
+import com.zest.android.util.viewModelProvider
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -30,13 +29,8 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         (activity as MainActivity).mainComponent.inject(this)
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                viewModelProvider.get() as T
-        })[RecipeViewModel::class.java]
+        viewModel = this.viewModelProvider(viewModelProvider)
     }
 
     override fun onCreateView(
@@ -83,10 +77,6 @@ class DetailFragment : Fragment() {
     private fun checkIsFavorite(nonNullRecipe: Recipe) {
         if (viewModel.isFavorited(nonNullRecipe)) binding.detailFab.setImageResource(R.drawable.ic_star_full_vector)
         else binding.detailFab.setImageResource(R.drawable.ic_star_empty_white_vector)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.detail, menu)
     }
 
     private inner class OnChipListener(private val tags: Array<String>) : ChipListener {

@@ -27,17 +27,10 @@
         android:id="@+id/action_favoritesFragment_to_searchFragment"
         app:destination="@id/searchFragment" />
 
-
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.zest.android.ui.search.SearchFragment"
-        android:label="SearchFragment" />
-
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.zest.android.ui.detail.DetailFragment"
         android:label=""
         tools:layout="@layout/fragment_detail" />
-
 
 </navigation>

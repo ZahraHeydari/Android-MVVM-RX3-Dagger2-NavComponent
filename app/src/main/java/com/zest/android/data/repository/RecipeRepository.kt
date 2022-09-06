@@ -44,23 +44,45 @@ class RecipeRepository @Inject constructor(
         fromSearch: Boolean,
         onResponse: APIResponse<RecipeResponse>
     ): Disposable {
+        return if (fromSearch) search(compositeDisposable, input, onResponse)
+        else getRandomRecipes(compositeDisposable, input, onResponse)
+    }
+
+    private fun getRandomRecipes(
+        compositeDisposable: CompositeDisposable,
+        input: String,
+        onResponse: APIResponse<RecipeResponse>
+    ): Disposable {
         val result = RecipeResponse()
-        return apiService.run {
-            if (fromSearch) this.search(input) else this.getRecipes(input)
-        }.run {
-            this.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .repeat(10)
-                .doOnNext {
-                    result.recipes.add(it.recipes.first())
-                }
-                .subscribe({
-                    onResponse.onSuccess(result)
-                }, {
-                    onResponse.onError(it)
-                }).also {
-                    compositeDisposable.add(it)
-                }
-        }
+        return apiService.getRecipes(input).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .repeat(10)
+            .doOnNext {
+                result.recipes.add(it.recipes.first())
+            }
+            .subscribe({
+                onResponse.onSuccess(result)
+            }, {
+                onResponse.onError(it)
+            }).also {
+                compositeDisposable.add(it)
+            }
+    }
+
+    private fun search(
+        compositeDisposable: CompositeDisposable,
+        input: String,
+        onResponse: APIResponse<RecipeResponse>
+    ): Disposable {
+        return apiService.getRecipes(input)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                onResponse.onSuccess(it)
+            }, {
+                onResponse.onError(it)
+            }).also {
+                compositeDisposable.add(it)
+            }
     }
 }

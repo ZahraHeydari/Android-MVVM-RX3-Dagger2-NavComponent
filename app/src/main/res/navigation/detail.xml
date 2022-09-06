@@ -5,7 +5,6 @@
     android:id="@+id/detail"
     app:startDestination="@id/detailFragment">
 
-
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.zest.android.ui.detail.DetailFragment"
@@ -28,9 +27,4 @@
 
     </action>
 
-    <fragment
-        android:id="@+id/searchFragment"
-        android:label=""
-        android:name="com.zest.android.ui.search.SearchFragment"
-        tools:layout="@layout/fragment_search" />
 </navigation>

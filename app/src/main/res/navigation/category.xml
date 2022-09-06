@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.zest.android.ui.category.CategoryFragment"
-        android:label="Food Category"
+        android:label="Category"
         tools:layout="@layout/fragment_category" />
 
     <action
@@ -25,6 +25,5 @@
         android:id="@+id/searchFragment"
         android:name="com.zest.android.ui.search.SearchFragment"
         android:label="" />
-
 
 </navigation>

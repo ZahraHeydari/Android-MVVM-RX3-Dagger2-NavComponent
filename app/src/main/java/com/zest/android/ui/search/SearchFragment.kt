@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.zest.android.R
 import com.zest.android.databinding.FragmentSearchBinding
 import com.zest.android.ui.main.MainActivity
 import com.zest.android.ui.recipes.RecipeViewModel
+import com.zest.android.util.viewModelProvider
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -33,10 +31,7 @@ class SearchFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         (activity as MainActivity).mainComponent.inject(this)
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = viewModelProvider.get() as T
-        })[RecipeViewModel::class.java]
+        viewModel = this.viewModelProvider(viewModelProvider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,16 +53,15 @@ class SearchFragment : Fragment() {
         })
 
         with(viewModel) {
-
             recipesData.observe(viewLifecycleOwner) {
                 if (it != null) {
                     mAdapter.recipes = it
                 }
             }
 
-            isLoading.observe(viewLifecycleOwner, Observer {
+            isLoading.observe(viewLifecycleOwner) {
                 showProgressBar(it)
-            })
+            }
         }
 
         return binding.root

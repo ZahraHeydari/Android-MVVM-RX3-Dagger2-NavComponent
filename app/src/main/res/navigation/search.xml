@@ -5,7 +5,6 @@
     android:id="@+id/search"
     app:startDestination="@id/searchFragment">
 
-
     <fragment
         android:id="@+id/searchFragment"
         android:label=""
@@ -15,6 +14,7 @@
         <argument
             android:name="text"
             app:argType="string" />
+
     </fragment>
 
 
@@ -26,6 +26,7 @@
         <argument
             android:name="recipe"
             app:argType="com.zest.android.data.model.Recipe" />
+
     </action>
 
     <fragment
@@ -33,4 +34,5 @@
         android:label=""
         android:name="com.zest.android.ui.detail.DetailFragment"
         tools:layout="@layout/fragment_detail" />
+
 </navigation>

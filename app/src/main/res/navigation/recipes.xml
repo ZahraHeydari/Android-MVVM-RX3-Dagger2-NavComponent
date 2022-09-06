@@ -10,14 +10,17 @@
         android:name="com.zest.android.ui.recipes.RecipesFragment"
         android:label="Recipes"
         tools:layout="@layout/fragment_recipes">
+
         <action
             android:id="@+id/action_recipesFragment_to_detailFragment"
-            app:destination="@id/detailFragment" >
+            app:destination="@id/detailFragment">
 
-            <argument android:name="recipe"
-                app:argType="com.zest.android.data.model.Recipe"/>
+            <argument
+                android:name="recipe"
+                app:argType="com.zest.android.data.model.Recipe" />
 
         </action>
+
     </fragment>
 
     <action
@@ -26,18 +29,14 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:label=""
         android:name="com.zest.android.ui.search.SearchFragment"
+        android:label=""
         tools:layout="@layout/fragment_search" />
-
 
     <fragment
         android:id="@+id/detailFragment"
-        android:label=""
         android:name="com.zest.android.ui.detail.DetailFragment"
+        android:label=""
         tools:layout="@layout/fragment_detail" />
-
-
-
 
 </navigation>

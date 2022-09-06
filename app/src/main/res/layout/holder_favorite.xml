@@ -43,8 +43,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/favorite_icon_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_margin="16dp"
             android:padding="8dp"
             app:layout_constraintRight_toRightOf="parent"
